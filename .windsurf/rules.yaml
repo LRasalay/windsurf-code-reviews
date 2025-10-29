@@ -42,3 +42,71 @@ rules:
     pattern: "export function (?!.*\\/\\*\\*)"
     on: javascript
     action: warn
+
+ rules:
+
+  # --- CODE STYLE & READABILITY ---
+  require_jsdoc:
+    description: "Exported functions must include JSDoc"
+    pattern: "export function (?!.*\\/\\*\\*)"
+    on: javascript
+    action: warn
+
+  no_console_log:
+    description: "Use a logger instead of console.log"
+    pattern: "console\\.log"
+    on: javascript
+    action: warn
+
+  enforce_async_await:
+    description: "Prefer async/await over .then() chaining"
+    pattern: "\\.then\\("
+    on: javascript
+    action: suggest_fix
+
+  enforce_camel_case:
+    description: "Variables must be camelCase"
+    pattern: "\\b[A-Z][a-zA-Z0-9]* ?="
+    on: code
+    action: warn
+
+  # --- ERROR HANDLING ---
+  require_error_logging:
+    description: "Every catch block must log the error"
+    pattern: "catch \\((.*?)\\)\\s*\\{((?!log|console\\.error).)*?\\}"
+    on: javascript
+    action: warn
+
+  # --- SECURITY BEST PRACTICES ---
+  block_plaintext_secrets:
+    description: "Block hard-coded secrets"
+    pattern: "(AKIA[A-Z0-9]{16}|secret|password|token|apiKey|PRIVATE KEY)"
+    on: code
+    action: block
+
+  prevent_eval:
+    description: "Eval is forbidden"
+    pattern: "\\beval\\("
+    on: javascript
+    action: block
+
+  validate_dependency_urls:
+    description: "No untrusted dependency sources"
+    pattern: "http://"
+    on: config
+    action: warn
+
+  # --- TESTING REQUIREMENT ---
+  require_test_for_exported_function:
+    description: "Every exported function must have a matching test"
+    pattern: "export function (\\w+)"
+    on: javascript
+    action: warn
+
+  # --- COMMIT QUALITY ---
+  enforce_commit_format:
+    description: "Use Conventional Commit format"
+    pattern: "^(feat|fix|chore|docs|refactor|test|ci)"
+    on: commit_message
+    action: warn
+
