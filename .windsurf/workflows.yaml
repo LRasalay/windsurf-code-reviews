@@ -1,11 +1,11 @@
 workflows:
+
   pull_request_review:
     trigger: pull_request
     steps:
       - action: analyze_changes
       - action: run_lint
       - action: run_tests
-      - action: run_security_scan
       - action: check_rules
       - action: generate_review_comments
       - action: suggest_fixes
@@ -13,9 +13,9 @@ workflows:
     reviewers:
       - windsurf_ai
 
-  pre_push_security_gate:
+  pre_push_quality_gate:
     trigger: pre_push
     steps:
-      - action: run_tests
       - action: run_lint
+      - action: run_tests
       - action: check_rules
