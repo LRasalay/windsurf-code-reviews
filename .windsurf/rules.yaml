@@ -1,0 +1,44 @@
+rules:
+  # --- SECURITY POLICIES ---
+  no_plaintext_secrets:
+    description: "Block hard-coded secrets"
+    pattern: "(AKIA[A-Z0-9]{16}|secret|password|token|apiKey|PRIVATE KEY)"
+    on: code
+    action: block
+
+  disallow_eval:
+    description: "Eval is not permitted per security policy"
+    pattern: "\\beval\\("
+    on: javascript
+    action: block
+
+  validate_dependency_sources:
+    description: "Block unknown or untrusted npm sources"
+    pattern: "github.com/.*/raw"
+    on: config
+    action: warn
+
+  require_error_logging:
+    description: "catch blocks must log"
+    pattern: "catch \\((.*?)\\)\\s*\\{((?!console\\.error).)*?\\}"
+    on: javascript
+    action: warn
+
+  check_pii:
+    description: "Warn if PII terms are introduced"
+    pattern: "(ssn|dob|fullName|address|accountNumber)"
+    on: code
+    action: warn
+
+  # --- ENGINEERING POLICIES ---
+  enforce_jira_reference:
+    description: "Commit must reference JIRA ticket"
+    pattern: "((GRC|ENG|PROJ)-[0-9]+)"
+    on: commit_message
+    action: warn
+
+  enforce_docstrings:
+    description: "Exported functions require JSDoc"
+    pattern: "export function (?!.*\\/\\*\\*)"
+    on: javascript
+    action: warn
